@@ -21,11 +21,9 @@ set(LIBXML_VERSION_STRING "${LIBXML_VERSION}")
 set(LIBXML_VERSION_EXTRA "")
 set(LIBXML_VERSION_NUMBER ${LIBXML_VERSION})
 
-find_package(Iconv)
 find_package(ICU)
 find_package(LibLZMA)
 find_package(Threads)
-find_package(ZLIB)
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 set(LIBXML2_WITH_AUTOMATA ON)
@@ -38,14 +36,17 @@ option(LIBXML2_WITH_FTP "Add the FTP support" ON)
 option(LIBXML2_WITH_HTML "Add the HTML support" ON)
 option(LIBXML2_WITH_HTTP "Add the HTTP support" ON)
 option(LIBXML2_WITH_PYTHON "Build the python interface" OFF)
+
 if (LIBXML2_WITH_PYTHON)
     find_package(Python COMPONENTS Interpreter Development)
 endif ()
-if (Iconv_FOUND)
-    option(LIBXML2_WITH_ICONV "Add ICONV support" ON)
-else ()
-    set(LIBXML2_WITH_ICONV OFF)
-endif ()
+
+option(LIBXML2_WITH_ICONV "Add ICONV support" ON)
+# commented out by ciaran welsh. We need libxml2_with_iconv
+#if (Iconv_FOUND)
+#else ()
+#    set(LIBXML2_WITH_ICONV OFF)
+#endif ()
 
 if (ICU_FOUND)
     option(LIBXML2_WITH_ICU "Add ICU support" ON)
@@ -101,11 +102,14 @@ option(LIBXML2_WITH_XINCLUDE "Add the XInclude support" ON)
 option(LIBXML2_WITH_XPATH "Add the XPATH support" ON)
 option(LIBXML2_WITH_XPTR "Add the XPointer support" ON)
 
-if (ZLIB_FOUND)
-    option(LIBXML2_WITH_ZLIB "Use libz" ON)
-else ()
-    set(LIBXML2_WITH_ZLIB OFF)
-endif ()
+
+option(LIBXML2_WITH_ZLIB "Use libz" ON)
+
+# commented out by ciaran welsh. We need zlib
+#if (ZLIB_FOUND)
+#else ()
+#    set(LIBXML2_WITH_ZLIB OFF)
+#endif ()
 
 set(LIBXML2_XMLCONF_WORKING_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE PATH "Working directory for XML Conformance Test Suite")
 
@@ -434,12 +438,21 @@ if (LIBXML2_WITH_THREADS)
     endif ()
 endif ()
 
+if (NOT LIBICONV_INCLUDE_DIR)
+    message(FATAL_ERROR "LIBICONV_INCLUDE_DIR variable not set \"${LIBICONV_INCLUDE_DIR}\"")
+endif()
+
+if (NOT ZLIB_INCLUDE_DIR)
+    message(FATAL_ERROR "ZLIB_INCLUDE_DIR variable not set \"${ZLIB_INCLUDE_DIR}\"")
+endif()
 target_include_directories(
         LibXml2
-        PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
         $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}/libxml2>
+        ${LIBICONV_INCLUDE_DIR}
+        ${ZLIB_INCLUDE_DIR}
 )
 
 if (HAVE_DLOPEN)
@@ -459,7 +472,7 @@ if (WIN32)
 endif ()
 
 if (LIBXML2_WITH_ICONV)
-    target_link_libraries(LibXml2 PUBLIC Iconv::Iconv)
+    target_link_libraries(LibXml2 PUBLIC libiconv-static)
 endif ()
 
 if (LIBXML2_WITH_ICU)
@@ -475,7 +488,7 @@ if (LIBXML2_WITH_THREADS)
 endif ()
 
 if (LIBXML2_WITH_ZLIB)
-    target_link_libraries(LibXml2 PRIVATE ZLIB::ZLIB)
+    target_link_libraries(LibXml2 PRIVATE zlibstatic)
 endif ()
 
 set_target_properties(
