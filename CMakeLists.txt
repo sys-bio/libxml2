@@ -529,7 +529,8 @@ if (MSVC AND BUILD_SHARED_LIBS)
     install(FILES $<TARGET_PDB_FILE:LibXml2> DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS Debug RelWithDebInfo COMPONENT debug)
 endif ()
 
-if (LIBXML2_WITH_PROGRAMS)
+if (${LIBXML2_WITH_PROGRAMS})
+    message(STATUS "BUILDING LIBXML PROGRAMS")
     set(
             PROGRAMS
             xmlcatalog
@@ -548,7 +549,7 @@ if (LIBXML2_WITH_PROGRAMS)
     endforeach ()
 endif ()
 
-if (LIBXML2_WITH_TESTS)
+if (${LIBXML2_WITH_TESTS})
     message(STATUS "doing libxml with tests")
     enable_testing()
     set(
@@ -603,7 +604,7 @@ if (LIBXML2_WITH_TESTS)
     endif ()
 endif ()
 
-if (LIBXML2_WITH_PYTHON)
+if (${LIBXML2_WITH_PYTHON})
     execute_process(
             COMMAND
             ${Python_EXECUTABLE}
