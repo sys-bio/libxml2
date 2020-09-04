@@ -25,7 +25,7 @@ find_package(ICU)
 find_package(LibLZMA)
 find_package(Threads)
 
-option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 set(LIBXML2_WITH_AUTOMATA ON)
 option(LIBXML2_WITH_C14N "Add the Canonicalization support" ON)
 option(LIBXML2_WITH_CATALOG "Add the Catalog support" ON)
@@ -445,14 +445,20 @@ endif()
 if (NOT ZLIB_INCLUDE_DIR)
     message(FATAL_ERROR "ZLIB_INCLUDE_DIR variable not set \"${ZLIB_INCLUDE_DIR}\"")
 endif()
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlexports.h" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/libxml)
+
+
+message("ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIR}")
+message("LIBICONV_INCLUDE_DIR ${LIBICONV_INCLUDE_DIR}")
 target_include_directories(
         LibXml2
         PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}/libxml2>
-        ${LIBICONV_INCLUDE_DIR}
-        ${ZLIB_INCLUDE_DIR}
+            ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            $<BUILD_INTERFACE:${ZLIB_INCLUDE_DIR}>
+            $<BUILD_INTERFACE:${LIBICONV_INCLUDE_DIR}>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/libxml2>
 )
 
 if (HAVE_DLOPEN)
