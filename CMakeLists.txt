@@ -449,8 +449,6 @@ endif()
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlexports.h" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/libxml)
 
 
-message("ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIR}")
-message("LIBICONV_INCLUDE_DIR ${LIBICONV_INCLUDE_DIR}")
 target_include_directories(
         LibXml2
         PRIVATE
@@ -684,16 +682,17 @@ install(FILES doc/xmlcatalog.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONEN
 install(FILES doc/xmllint.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT documentation)
 install(DIRECTORY doc/ DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/libxml2 COMPONENT documentation PATTERN Makefile.* EXCLUDE)
 
-configure_package_config_file(
-        libxml2-config.cmake.cmake.in libxml2-config.cmake
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libxml2-${VERSION}
-)
+#configure_package_config_file(
+#        libxml2-config.cmake.cmake.in libxml2-config.cmake
+#        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+#)
+#
+#install(
+#        FILES ${CMAKE_CURRENT_BINARY_DIR}/libxml2-config.cmake
+#        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+#        COMPONENT development
+#)
 
-install(
-        FILES ${CMAKE_CURRENT_BINARY_DIR}/libxml2-config.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libxml2-${VERSION}
-        COMPONENT development
-)
 
 write_basic_package_version_file(
         ${CMAKE_CURRENT_BINARY_DIR}/libxml2-config-version.cmake
@@ -703,15 +702,15 @@ write_basic_package_version_file(
 
 install(
         FILES ${CMAKE_CURRENT_BINARY_DIR}/libxml2-config-version.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libxml2-${VERSION}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
         COMPONENT development
 )
 
 install(
         EXPORT LibXml2
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libxml2-${VERSION}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
         NAMESPACE LibXml2::
-        FILE libxml2-export.cmake
+        FILE libxml2-config.cmake
         COMPONENT development
 )
 
