@@ -451,28 +451,30 @@ file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlexports.h" DESTINATION 
 
 target_include_directories(
         LibXml2
-        PRIVATE
-            ${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}/include
-            $<BUILD_INTERFACE:${ZLIB_INCLUDE_DIR}>
-            $<BUILD_INTERFACE:${LIBICONV_INCLUDE_DIR}>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/libxml2>
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${ZLIB_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${LIBICONV_INCLUDE_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/libxml2>
 )
 
+
 if (HAVE_DLOPEN)
-    target_link_libraries(LibXml2 PRIVATE dl)
+    target_link_libraries(LibXml2 PUBLIC dl)
 endif ()
 
 if (HAVE_SHLLOAD)
-    target_link_libraries(LibXml2 PRIVATE dld)
+    target_link_libraries(LibXml2 PUBLIC dld)
 endif ()
 
 if (UNIX)
-    target_link_libraries(LibXml2 PRIVATE m)
+    target_link_libraries(LibXml2 PUBLIC m)
 endif ()
 
 if (WIN32)
-    target_link_libraries(LibXml2 PRIVATE ws2_32)
+    target_link_libraries(LibXml2 PUBLIC ws2_32)
 endif ()
 
 if (LIBXML2_WITH_ICONV)
@@ -480,19 +482,19 @@ if (LIBXML2_WITH_ICONV)
 endif ()
 
 if (LIBXML2_WITH_ICU)
-    target_link_libraries(LibXml2 PRIVATE ICU::i18n)
+    target_link_libraries(LibXml2 PUBLIC ICU::i18n)
 endif ()
 
 if (LIBXML2_WITH_LZMA)
-    target_link_libraries(LibXml2 PRIVATE LibLZMA::LibLZMA)
+    target_link_libraries(LibXml2 PUBLIC LibLZMA::LibLZMA)
 endif ()
 
 if (LIBXML2_WITH_THREADS)
-    target_link_libraries(LibXml2 PRIVATE Threads::Threads)
+    target_link_libraries(LibXml2 PUBLIC Threads::Threads)
 endif ()
 
 if (LIBXML2_WITH_ZLIB)
-    target_link_libraries(LibXml2 PRIVATE zlibstatic)
+    target_link_libraries(LibXml2 PUBLIC zlibstatic)
 endif ()
 
 set_target_properties(
