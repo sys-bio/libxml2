@@ -24,6 +24,9 @@ set(LIBXML_VERSION_NUMBER ${LIBXML_VERSION})
 find_package(ICU)
 find_package(LibLZMA)
 find_package(Threads)
+find_package(LibXml2)
+
+message(STATUS "LIBXSLT ${LibXml2_FOUND}")
 
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 set(LIBXML2_WITH_AUTOMATA ON)
@@ -447,15 +450,15 @@ if (NOT ZLIB_INCLUDE_DIR)
 endif()
 
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlexports.h" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/libxml)
-
-
 target_include_directories(
         LibXml2
-        PRIVATE
-            ${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}/include
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
             $<BUILD_INTERFACE:${ZLIB_INCLUDE_DIR}>
             $<BUILD_INTERFACE:${LIBICONV_INCLUDE_DIR}>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/libxml2>
 )
 
@@ -714,8 +717,11 @@ install(
         COMPONENT development
 )
 
-configure_file(include/libxml/xmlversion.h.in libxml/xmlversion.h)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libxml/xmlversion.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlversion.h.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlversion.h
+)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/libxml/xmlversion.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
 
 if (MSVC)
     configure_file(include/libxml/xmlwin32version.h.in libxml/xmlwin32version.h)
