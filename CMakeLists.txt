@@ -729,7 +729,7 @@ if (MSVC)
     configure_file(
             "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlwin32version.h.in"
             "${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlwin32version.h")
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libxml/xmlwin32version.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlwin32version.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
 endif ()
 
 if (LIBXML2_WITH_PYTHON)
