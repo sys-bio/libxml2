@@ -454,6 +454,7 @@ target_include_directories(
         LibXml2
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${ZLIB_INCLUDE_DIR}>
             $<BUILD_INTERFACE:${LIBICONV_INCLUDE_DIR}>
