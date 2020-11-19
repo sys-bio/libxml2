@@ -718,13 +718,15 @@ install(
 )
 
 configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlversion.h.in
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlversion.h
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlversion.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlversion.h"
 )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlversion.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlversion.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
 
 if (MSVC)
-    configure_file(include/libxml/xmlwin32version.h.in libxml/xmlwin32version.h)
+    configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlwin32version.h.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/include/libxml/xmlwin32version.h")
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libxml/xmlwin32version.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libxml2/libxml COMPONENT development)
 endif ()
 
