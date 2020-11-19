@@ -449,7 +449,8 @@ if (NOT ZLIB_INCLUDE_DIR)
     message(FATAL_ERROR "ZLIB_INCLUDE_DIR variable not set \"${ZLIB_INCLUDE_DIR}\"")
 endif()
 
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlexports.h" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/libxml)
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml/xmlexports.h" DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}/include/libxml)
 target_include_directories(
         LibXml2
         PUBLIC
