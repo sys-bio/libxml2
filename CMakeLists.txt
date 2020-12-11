@@ -432,7 +432,7 @@ if (LIBXML2_WITH_TRIO)
     list(APPEND LIBXML2_SRCS trio.c triostr.c)
 endif ()
 
-add_library(LibXml2 ${LIBXML2_HDRS} ${LIBXML2_SRCS})
+add_library(LibXml2 STATIC ${LIBXML2_HDRS} ${LIBXML2_SRCS})
 
 if (LIBXML2_WITH_THREADS)
     target_compile_definitions(LibXml2 PRIVATE _REENTRANT)
